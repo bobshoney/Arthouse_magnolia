@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lissa Belyea - Art Gallery</title>
+    <title>Lissa Belyea - Contemporary Art Gallery</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="Explore original contemporary artworks by Lissa Belyea. Shop paintings, mixed media, and limited editions online.">
 </head>
 <body>
     <div id="root"></div>
@@ -15,7 +16,7 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // Lucide React Icons as inline SVG components
+        // Icon Components
         const ShoppingCart = ({ size = 24 }) => (
             <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="9" cy="21" r="1"></circle>
@@ -44,10 +45,65 @@
             </svg>
         );
 
+        const Search = ({ size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+        );
+
+        const Filter = ({ size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+        );
+
+        const Mail = ({ size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+        );
+
+        const Instagram = ({ size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+        );
+
+        const Facebook = ({ size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+        );
+
+        const Menu = ({ size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        );
+
+        const Eye = ({ size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+        );
+
         const ArtGallery = () => {
             const [cart, setCart] = useState([]);
             const [showCart, setShowCart] = useState(false);
             const [selectedArt, setSelectedArt] = useState(null);
+            const [showMobileMenu, setShowMobileMenu] = useState(false);
+            const [searchTerm, setSearchTerm] = useState('');
+            const [filterMedium, setFilterMedium] = useState('All');
+            const [filterPrice, setFilterPrice] = useState('All');
+            const [showNewsletter, setShowNewsletter] = useState(false);
+            const [email, setEmail] = useState('');
 
             const artworks = [
                 {
@@ -57,8 +113,10 @@
                     price: 1200,
                     medium: "Oil on Canvas",
                     size: "24\" x 36\"",
+                    year: "2024",
                     image: "https://via.placeholder.com/800x800/FF6B6B/FFFFFF?text=Artwork+1",
-                    description: "A vibrant exploration of color and light capturing the essence of twilight."
+                    description: "A vibrant exploration of color and light capturing the essence of twilight.",
+                    available: true
                 },
                 {
                     id: 2,
@@ -67,8 +125,10 @@
                     price: 950,
                     medium: "Acrylic on Canvas",
                     size: "20\" x 30\"",
+                    year: "2024",
                     image: "https://via.placeholder.com/800x800/4ECDC4/FFFFFF?text=Artwork+2",
-                    description: "Dynamic cityscape reflecting the energy of metropolitan life."
+                    description: "Dynamic cityscape reflecting the energy of metropolitan life.",
+                    available: true
                 },
                 {
                     id: 3,
@@ -77,8 +137,10 @@
                     price: 1500,
                     medium: "Oil on Canvas",
                     size: "30\" x 40\"",
+                    year: "2023",
                     image: "https://via.placeholder.com/800x800/45B7D1/FFFFFF?text=Artwork+3",
-                    description: "A serene meditation on the fluidity and power of water."
+                    description: "A serene meditation on the fluidity and power of water.",
+                    available: true
                 },
                 {
                     id: 4,
@@ -87,8 +149,10 @@
                     price: 850,
                     medium: "Watercolor",
                     size: "18\" x 24\"",
+                    year: "2024",
                     image: "https://via.placeholder.com/800x800/F7DC6F/FFFFFF?text=Artwork+4",
-                    description: "Delicate brushwork capturing the magic of late afternoon light."
+                    description: "Delicate brushwork capturing the magic of late afternoon light.",
+                    available: true
                 },
                 {
                     id: 5,
@@ -97,8 +161,10 @@
                     price: 1100,
                     medium: "Mixed Media",
                     size: "24\" x 24\"",
+                    year: "2023",
                     image: "https://via.placeholder.com/800x800/BB8FCE/FFFFFF?text=Artwork+5",
-                    description: "Bold geometric forms dancing in perfect compositional balance."
+                    description: "Bold geometric forms dancing in perfect compositional balance.",
+                    available: true
                 },
                 {
                     id: 6,
@@ -107,10 +173,23 @@
                     price: 1800,
                     medium: "Oil on Canvas",
                     size: "36\" x 48\"",
+                    year: "2023",
                     image: "https://via.placeholder.com/800x800/85C1E2/FFFFFF?text=Artwork+6",
-                    description: "Majestic peaks rendered with dramatic light and atmospheric depth."
+                    description: "Majestic peaks rendered with dramatic light and atmospheric depth.",
+                    available: false
                 }
             ];
+
+            const filteredArtworks = artworks.filter(art => {
+                const matchesSearch = art.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    art.description.toLowerCase().includes(searchTerm.toLowerCase());
+                const matchesMedium = filterMedium === 'All' || art.medium === filterMedium;
+                const matchesPrice = filterPrice === 'All' || 
+                                    (filterPrice === 'Under $1000' && art.price < 1000) ||
+                                    (filterPrice === '$1000-$1500' && art.price >= 1000 && art.price <= 1500) ||
+                                    (filterPrice === 'Over $1500' && art.price > 1500);
+                return matchesSearch && matchesMedium && matchesPrice;
+            });
 
             const addToCart = (artwork) => {
                 const existing = cart.find(item => item.id === artwork.id);
@@ -139,70 +218,197 @@
                 setCart(cart.filter(item => item.id !== id));
             };
 
+            const handleNewsletterSubmit = (e) => {
+                e.preventDefault();
+                alert(`Thank you for subscribing! We'll send updates to ${email}`);
+                setEmail('');
+                setShowNewsletter(false);
+            };
+
             const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
             return (
                 <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+                    {/* Header */}
                     <header className="bg-white shadow-md sticky top-0 z-40">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                             <div className="flex justify-between items-center">
                                 <div>
                                     <h1 className="text-3xl font-bold text-gray-900">Lissa Belyea</h1>
                                     <p className="text-gray-600 mt-1">Contemporary Artist</p>
                                 </div>
-                                <button
-                                    onClick={() => setShowCart(!showCart)}
-                                    className="relative bg-slate-900 text-white px-6 py-3 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2"
-                                >
-                                    <ShoppingCart size={20} />
-                                    <span>Cart</span>
-                                    {cartCount > 0 && (
-                                        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
-                                            {cartCount}
-                                        </span>
-                                    )}
-                                </button>
+                                
+                                {/* Desktop Navigation */}
+                                <nav className="hidden md:flex items-center gap-8">
+                                    <a href="#gallery" className="text-gray-700 hover:text-gray-900 transition">Gallery</a>
+                                    <a href="#about" className="text-gray-700 hover:text-gray-900 transition">About</a>
+                                    <a href="#contact" className="text-gray-700 hover:text-gray-900 transition">Contact</a>
+                                    <button
+                                        onClick={() => setShowCart(!showCart)}
+                                        className="relative bg-slate-900 text-white px-6 py-3 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2"
+                                    >
+                                        <ShoppingCart size={20} />
+                                        <span>Cart</span>
+                                        {cartCount > 0 && (
+                                            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                                                {cartCount}
+                                            </span>
+                                        )}
+                                    </button>
+                                </nav>
+
+                                {/* Mobile Menu Button */}
+                                <div className="md:hidden flex items-center gap-4">
+                                    <button
+                                        onClick={() => setShowCart(!showCart)}
+                                        className="relative text-gray-700"
+                                    >
+                                        <ShoppingCart size={24} />
+                                        {cartCount > 0 && (
+                                            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                                                {cartCount}
+                                            </span>
+                                        )}
+                                    </button>
+                                    <button onClick={() => setShowMobileMenu(!showMobileMenu)}>
+                                        <Menu size={24} />
+                                    </button>
+                                </div>
                             </div>
+
+                            {/* Mobile Navigation */}
+                            {showMobileMenu && (
+                                <nav className="md:hidden mt-4 pb-4 flex flex-col gap-3">
+                                    <a href="#gallery" className="text-gray-700 hover:text-gray-900 transition py-2">Gallery</a>
+                                    <a href="#about" className="text-gray-700 hover:text-gray-900 transition py-2">About</a>
+                                    <a href="#contact" className="text-gray-700 hover:text-gray-900 transition py-2">Contact</a>
+                                </nav>
+                            )}
                         </div>
                     </header>
 
-                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                        <div className="mb-12 text-center">
-                            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-                                Explore a curated collection of original paintings and mixed media works. 
-                                Each piece is an authentic original, signed by the artist.
+                    {/* Hero Section */}
+                    <section className="bg-gradient-to-r from-slate-900 to-slate-700 text-white py-20">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                            <h2 className="text-5xl font-bold mb-4">Original Contemporary Art</h2>
+                            <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+                                Discover unique paintings and mixed media works that bring color and emotion to your space
                             </p>
+                            <div className="flex gap-4 justify-center">
+                                <a href="#gallery" className="bg-white text-slate-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                                    View Collection
+                                </a>
+                                <button 
+                                    onClick={() => setShowNewsletter(true)}
+                                    className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-slate-900 transition"
+                                >
+                                    Subscribe
+                                </button>
+                            </div>
                         </div>
+                    </section>
 
+                    {/* Search and Filter Section */}
+                    <section id="gallery" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        <div className="bg-white p-6 rounded-xl shadow-md">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                {/* Search */}
+                                <div className="md:col-span-2 relative">
+                                    <Search className="absolute left-3 top-3 text-gray-400" size={20} />
+                                    <input
+                                        type="text"
+                                        placeholder="Search artworks..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900"
+                                    />
+                                </div>
+
+                                {/* Medium Filter */}
+                                <select
+                                    value={filterMedium}
+                                    onChange={(e) => setFilterMedium(e.target.value)}
+                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900"
+                                >
+                                    <option value="All">All Mediums</option>
+                                    <option value="Oil on Canvas">Oil on Canvas</option>
+                                    <option value="Acrylic on Canvas">Acrylic</option>
+                                    <option value="Watercolor">Watercolor</option>
+                                    <option value="Mixed Media">Mixed Media</option>
+                                </select>
+
+                                {/* Price Filter */}
+                                <select
+                                    value={filterPrice}
+                                    onChange={(e) => setFilterPrice(e.target.value)}
+                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900"
+                                >
+                                    <option value="All">All Prices</option>
+                                    <option value="Under $1000">Under $1,000</option>
+                                    <option value="$1000-$1500">$1,000 - $1,500</option>
+                                    <option value="Over $1500">Over $1,500</option>
+                                </select>
+                            </div>
+                            <div className="mt-4 text-sm text-gray-600">
+                                Showing {filteredArtworks.length} of {artworks.length} artworks
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Main Content */}
+                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        {/* Art Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {artworks.map(art => (
+                            {filteredArtworks.map(art => (
                                 <div 
                                     key={art.id}
-                                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow cursor-pointer"
-                                    onClick={() => setSelectedArt(art)}
+                                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow cursor-pointer relative"
                                 >
-                                    <div className="aspect-square overflow-hidden bg-gray-100">
+                                    {!art.available && (
+                                        <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold z-10">
+                                            Sold
+                                        </div>
+                                    )}
+                                    <div className="aspect-square overflow-hidden bg-gray-100 relative group">
                                         <img 
                                             src={art.image} 
                                             alt={art.title}
                                             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                         />
+                                        <button 
+                                            onClick={() => setSelectedArt(art)}
+                                            className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center transition-all"
+                                        >
+                                            <span className="bg-white text-gray-900 px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+                                                <Eye size={18} />
+                                                View Details
+                                            </span>
+                                        </button>
                                     </div>
                                     <div className="p-6">
                                         <h3 className="text-xl font-bold text-gray-900 mb-2">{art.title}</h3>
-                                        <p className="text-gray-600 text-sm mb-3">{art.medium} • {art.size}</p>
+                                        <p className="text-gray-600 text-sm mb-3">{art.medium} • {art.size} • {art.year}</p>
                                         <div className="flex justify-between items-center">
                                             <span className="text-2xl font-bold text-slate-900">${art.price.toLocaleString()}</span>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    addToCart(art);
-                                                }}
-                                                className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors"
-                                            >
-                                                Add to Cart
-                                            </button>
+                                            {art.available ? (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        addToCart(art);
+                                                    }}
+                                                    className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors"
+                                                >
+                                                    Add to Cart
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    disabled
+                                                    className="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg cursor-not-allowed"
+                                                >
+                                                    Unavailable
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -210,6 +416,88 @@
                         </div>
                     </main>
 
+                    {/* About Section */}
+                    <section id="about" className="bg-white py-20 mt-16">
+                        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">About the Artist</h2>
+                            <div className="prose prose-lg max-w-none text-gray-700">
+                                <p className="mb-4">
+                                    Lissa Belyea is a contemporary artist whose work explores the intersection of color, emotion, and natural forms. 
+                                    Based in the Pacific Northwest, her paintings draw inspiration from coastal landscapes, urban environments, 
+                                    and the ever-changing quality of light.
+                                </p>
+                                <p className="mb-4">
+                                    Working primarily in oils and mixed media, Lissa creates pieces that invite viewers into moments of contemplation 
+                                    and wonder. Each artwork is an original, signed piece that reflects her commitment to craftsmanship and artistic integrity.
+                                </p>
+                                <p>
+                                    Her work has been featured in galleries across the United States and is held in private collections internationally. 
+                                    Lissa welcomes commissions and inquiries about her art.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Newsletter CTA */}
+                    <section className="bg-slate-900 text-white py-16">
+                        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                            <Mail className="mx-auto mb-4" size={48} />
+                            <h2 className="text-3xl font-bold mb-4">Stay Connected</h2>
+                            <p className="text-gray-300 mb-8 text-lg">
+                                Subscribe to receive updates about new artworks, exhibitions, and exclusive offers
+                            </p>
+                            <button
+                                onClick={() => setShowNewsletter(true)}
+                                className="bg-white text-slate-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+                            >
+                                Subscribe Now
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer id="contact" className="bg-gray-900 text-white py-12">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                {/* Contact Info */}
+                                <div>
+                                    <h3 className="text-xl font-bold mb-4">Contact</h3>
+                                    <p className="text-gray-400 mb-2">Email: info@lissabelyea.com</p>
+                                    <p className="text-gray-400 mb-2">Phone: (555) 123-4567</p>
+                                    <p className="text-gray-400">Studio visits by appointment</p>
+                                </div>
+
+                                {/* Quick Links */}
+                                <div>
+                                    <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+                                    <ul className="space-y-2">
+                                        <li><a href="#gallery" className="text-gray-400 hover:text-white transition">Gallery</a></li>
+                                        <li><a href="#about" className="text-gray-400 hover:text-white transition">About</a></li>
+                                        <li><a href="#" className="text-gray-400 hover:text-white transition">Commissions</a></li>
+                                        <li><a href="#" className="text-gray-400 hover:text-white transition">Shipping & Returns</a></li>
+                                    </ul>
+                                </div>
+
+                                {/* Social Media */}
+                                <div>
+                                    <h3 className="text-xl font-bold mb-4">Follow</h3>
+                                    <div className="flex gap-4">
+                                        <a href="#" className="text-gray-400 hover:text-white transition">
+                                            <Instagram size={24} />
+                                        </a>
+                                        <a href="#" className="text-gray-400 hover:text-white transition">
+                                            <Facebook size={24} />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                                <p>&copy; 2024 Lissa Belyea. All rights reserved.</p>
+                            </div>
+                        </div>
+                    </footer>
+
+                    {/* Shopping Cart Sidebar */}
                     {showCart && (
                         <div className="fixed inset-0 z-50 overflow-hidden">
                             <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setShowCart(false)} />
@@ -234,19 +522,6 @@
                                                         <p className="text-sm text-gray-600">${item.price.toLocaleString()}</p>
                                                         <div className="flex items-center gap-3 mt-2">
                                                             <button
-                                                                onClick={() => updateQuantity(item.id, -1)}
-                                                                className="w-7 h-7 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300"
-                                                            >
-                                                                <Minus size={14} />
-                                                            </button>
-                                                            <span className="font-semibold">{item.quantity}</span>
-                                                            <button
-                                                                onClick={() => updateQuantity(item.id, 1)}
-                                                                className="w-7 h-7 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300"
-                                                            >
-                                                                <Plus size={14} />
-                                                            </button>
-                                                            <button
                                                                 onClick={() => removeFromCart(item.id)}
                                                                 className="ml-auto text-red-500 hover:text-red-700 text-sm"
                                                             >
@@ -262,23 +537,75 @@
 
                                 {cart.length > 0 && (
                                     <div className="border-t p-6 bg-gray-50">
-                                        <div className="flex justify-between items-center mb-4">
-                                            <span className="text-lg font-semibold">Total:</span>
-                                            <span className="text-2xl font-bold">${cartTotal.toLocaleString()}</span>
+                                        <div className="space-y-2 mb-4">
+                                            <div className="flex justify-between text-gray-600">
+                                                <span>Subtotal:</span>
+                                                <span>${cartTotal.toLocaleString()}</span>
+                                            </div>
+                                            <div className="flex justify-between text-gray-600">
+                                                <span>Shipping:</span>
+                                                <span>Calculated at checkout</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-xl font-bold border-t pt-2">
+                                                <span>Total:</span>
+                                                <span>${cartTotal.toLocaleString()}</span>
+                                            </div>
                                         </div>
-                                        <button className="w-full bg-slate-900 text-white py-4 rounded-lg hover:bg-slate-800 transition-colors font-semibold">
+                                        <button className="w-full bg-slate-900 text-white py-4 rounded-lg hover:bg-slate-800 transition-colors font-semibold mb-2">
                                             Proceed to Checkout
                                         </button>
+                                        <p className="text-xs text-gray-500 text-center">Secure checkout • Free shipping over $1000</p>
                                     </div>
                                 )}
                             </div>
                         </div>
                     )}
 
+                    {/* Newsletter Modal */}
+                    {showNewsletter && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+                            <div className="bg-white rounded-xl max-w-md w-full p-8 relative">
+                                <button
+                                    onClick={() => setShowNewsletter(false)}
+                                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                                >
+                                    <X size={24} />
+                                </button>
+                                <div className="text-center mb-6">
+                                    <Mail className="mx-auto mb-4 text-slate-900" size={48} />
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Join Our Newsletter</h3>
+                                    <p className="text-gray-600">
+                                        Get exclusive updates on new artworks, exhibitions, and special offers
+                                    </p>
+                                </div>
+                                <form onSubmit={handleNewsletterSubmit}>
+                                    <input
+                                        type="email"
+                                        placeholder="Enter your email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-slate-900"
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-slate-900 text-white py-3 rounded-lg hover:bg-slate-800 transition-colors font-semibold"
+                                    >
+                                        Subscribe
+                                    </button>
+                                    <p className="text-xs text-gray-500 text-center mt-4">
+                                        We respect your privacy. Unsubscribe at any time.
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Artwork Detail Modal */}
                     {selectedArt && (
                         <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-75 flex items-center justify-center p-4">
-                            <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                                <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+                            <div className="bg-white rounded-xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+                                <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center z-10">
                                     <h2 className="text-2xl font-bold">{selectedArt.title}</h2>
                                     <button onClick={() => setSelectedArt(null)} className="text-gray-500 hover:text-gray-700">
                                         <X size={24} />
@@ -290,39 +617,87 @@
                                             <img 
                                                 src={selectedArt.image} 
                                                 alt={selectedArt.title}
-                                                className="w-full rounded-lg shadow-lg"
+                                                className="w-full rounded-lg shadow-lg mb-4"
                                             />
+                                            <div className="bg-gray-50 p-4 rounded-lg">
+                                                <h4 className="font-semibold mb-2">Artwork Details</h4>
+                                                <ul className="text-sm text-gray-600 space-y-1">
+                                                    <li>• Original artwork, one of a kind</li>
+                                                    <li>• Signed by the artist</li>
+                                                    <li>• Certificate of authenticity included</li>
+                                                    <li>• Professional packaging and insured shipping</li>
+                                                    <li>• 14-day return policy</li>
+                                                </ul>
+                                            </div>
                                         </div>
                                         <div>
-                                            <p className="text-gray-700 mb-4">{selectedArt.description}</p>
-                                            <div className="space-y-3 mb-6">
-                                                <div className="flex justify-between border-b pb-2">
-                                                    <span className="font-semibold">Artist:</span>
-                                                    <span>{selectedArt.artist}</span>
+                                            <div className="mb-6">
+                                                <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
+                                                    selectedArt.available 
+                                                        ? 'bg-green-100 text-green-800' 
+                                                        : 'bg-red-100 text-red-800'
+                                                }`}>
+                                                    {selectedArt.available ? 'Available' : 'Sold'}
+                                                </span>
+                                            </div>
+                                            <p className="text-gray-700 mb-6 leading-relaxed">{selectedArt.description}</p>
+                                            <div className="space-y-4 mb-6">
+                                                <div className="flex justify-between border-b pb-3">
+                                                    <span className="font-semibold text-gray-900">Artist:</span>
+                                                    <span className="text-gray-700">{selectedArt.artist}</span>
                                                 </div>
-                                                <div className="flex justify-between border-b pb-2">
-                                                    <span className="font-semibold">Medium:</span>
-                                                    <span>{selectedArt.medium}</span>
+                                                <div className="flex justify-between border-b pb-3">
+                                                    <span className="font-semibold text-gray-900">Medium:</span>
+                                                    <span className="text-gray-700">{selectedArt.medium}</span>
                                                 </div>
-                                                <div className="flex justify-between border-b pb-2">
-                                                    <span className="font-semibold">Size:</span>
-                                                    <span>{selectedArt.size}</span>
+                                                <div className="flex justify-between border-b pb-3">
+                                                    <span className="font-semibold text-gray-900">Size:</span>
+                                                    <span className="text-gray-700">{selectedArt.size}</span>
                                                 </div>
-                                                <div className="flex justify-between border-b pb-2">
-                                                    <span className="font-semibold">Price:</span>
-                                                    <span className="text-2xl font-bold">${selectedArt.price.toLocaleString()}</span>
+                                                <div className="flex justify-between border-b pb-3">
+                                                    <span className="font-semibold text-gray-900">Year:</span>
+                                                    <span className="text-gray-700">{selectedArt.year}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center pt-2">
+                                                    <span className="font-semibold text-gray-900">Price:</span>
+                                                    <span className="text-3xl font-bold text-slate-900">${selectedArt.price.toLocaleString()}</span>
                                                 </div>
                                             </div>
-                                            <button
-                                                onClick={() => {
-                                                    addToCart(selectedArt);
-                                                    setSelectedArt(null);
-                                                    setShowCart(true);
-                                                }}
-                                                className="w-full bg-slate-900 text-white py-4 rounded-lg hover:bg-slate-800 transition-colors font-semibold"
-                                            >
-                                                Add to Cart
-                                            </button>
+                                            
+                                            {selectedArt.available ? (
+                                                <>
+                                                    <button
+                                                        onClick={() => {
+                                                            addToCart(selectedArt);
+                                                            setSelectedArt(null);
+                                                            setShowCart(true);
+                                                        }}
+                                                        className="w-full bg-slate-900 text-white py-4 rounded-lg hover:bg-slate-800 transition-colors font-semibold mb-3"
+                                                    >
+                                                        Add to Cart
+                                                    </button>
+                                                    <button className="w-full bg-white border-2 border-slate-900 text-slate-900 py-4 rounded-lg hover:bg-gray-50 transition-colors font-semibold">
+                                                        Inquire About This Piece
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <div className="bg-gray-100 p-4 rounded-lg text-center">
+                                                    <p className="text-gray-700 mb-3">This artwork has been sold</p>
+                                                    <button className="text-slate-900 font-semibold hover:underline">
+                                                        View Similar Artworks
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                                                <p className="text-sm text-gray-700">
+                                                    <strong>Need help?</strong> Our art consultants are available to answer questions 
+                                                    about this piece, discuss commissions, or arrange a studio visit.
+                                                </p>
+                                                <button className="mt-2 text-slate-900 font-semibold hover:underline text-sm">
+                                                    Contact Us
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -338,3 +713,16 @@
     </script>
 </body>
 </html>
+                                                                onClick={() => updateQuantity(item.id, -1)}
+                                                                className="w-7 h-7 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300"
+                                                            >
+                                                                <Minus size={14} />
+                                                            </button>
+                                                            <span className="font-semibold">{item.quantity}</span>
+                                                            <button
+                                                                onClick={() => updateQuantity(item.id, 1)}
+                                                                className="w-7 h-7 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300"
+                                                            >
+                                                                <Plus size={14} />
+                                                            </button>
+                                                            <button
