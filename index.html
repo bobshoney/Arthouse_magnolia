@@ -3,60 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clementine - Contemporary Art Gallery</title>
+    <title>Clementine - Art Gallery</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        h1, h2, h3, .serif {
-            font-family: 'Playfair Display', serif;
-        }
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .art-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .art-card:hover {
-            transform: translateY(-8px);
-        }
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .badge {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .8; }
-        }
-    </style>
 </head>
-<body class="bg-gray-50">
+<body>
     <div id="root"></div>
     
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState } = React;
 
+        // Lucide React Icons as inline SVG components
         const ShoppingCart = ({ size = 24 }) => (
             <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="9" cy="21" r="1"></circle>
@@ -85,33 +44,10 @@
             </svg>
         );
 
-        const Mail = ({ size = 24 }) => (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                <polyline points="22,6 12,13 2,6"></polyline>
-            </svg>
-        );
-
-        const Instagram = ({ size = 24 }) => (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-        );
-
-        const Check = ({ size = 24 }) => (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-        );
-
         const ArtGallery = () => {
             const [cart, setCart] = useState([]);
             const [showCart, setShowCart] = useState(false);
             const [selectedArt, setSelectedArt] = useState(null);
-            const [filter, setFilter] = useState('all');
-            const [showSuccess, setShowSuccess] = useState(false);
 
             const artworks = [
                 {
@@ -121,12 +57,8 @@
                     price: 1200,
                     medium: "Oil on Canvas",
                     size: "24\" x 36\"",
-                    category: "landscape",
-                    year: "2024",
-                    image: "https://via.placeholder.com/800x800/FF6B6B/FFFFFF?text=Sunset+Dreams",
-                    description: "A vibrant exploration of color and light capturing the essence of twilight. This piece represents the culmination of months studying the interplay between warm and cool tones.",
-                    inStock: true,
-                    featured: true
+                    image: "https://via.placeholder.com/800x800/FF6B6B/FFFFFF?text=Artwork+1",
+                    description: "A vibrant exploration of color and light capturing the essence of twilight."
                 },
                 {
                     id: 2,
@@ -135,12 +67,8 @@
                     price: 950,
                     medium: "Acrylic on Canvas",
                     size: "20\" x 30\"",
-                    category: "abstract",
-                    year: "2024",
-                    image: "https://via.placeholder.com/800x800/4ECDC4/FFFFFF?text=Urban+Pulse",
-                    description: "Dynamic cityscape reflecting the energy of metropolitan life. Bold strokes and vibrant colors capture the rhythm of urban existence.",
-                    inStock: true,
-                    featured: false
+                    image: "https://via.placeholder.com/800x800/4ECDC4/FFFFFF?text=Artwork+2",
+                    description: "Dynamic cityscape reflecting the energy of metropolitan life."
                 },
                 {
                     id: 3,
@@ -149,12 +77,8 @@
                     price: 1500,
                     medium: "Oil on Canvas",
                     size: "30\" x 40\"",
-                    category: "landscape",
-                    year: "2024",
-                    image: "https://via.placeholder.com/800x800/45B7D1/FFFFFF?text=Ethereal+Waters",
-                    description: "A serene meditation on the fluidity and power of water. Each brushstroke reflects years of observing coastal movements and tidal patterns.",
-                    inStock: true,
-                    featured: true
+                    image: "https://via.placeholder.com/800x800/45B7D1/FFFFFF?text=Artwork+3",
+                    description: "A serene meditation on the fluidity and power of water."
                 },
                 {
                     id: 4,
@@ -163,12 +87,8 @@
                     price: 850,
                     medium: "Watercolor",
                     size: "18\" x 24\"",
-                    category: "landscape",
-                    year: "2023",
-                    image: "https://via.placeholder.com/800x800/F7DC6F/FFFFFF?text=Golden+Hour",
-                    description: "Delicate brushwork capturing the magic of late afternoon light. The transparency of watercolor perfectly expresses the ephemeral nature of this fleeting moment.",
-                    inStock: true,
-                    featured: false
+                    image: "https://via.placeholder.com/800x800/F7DC6F/FFFFFF?text=Artwork+4",
+                    description: "Delicate brushwork capturing the magic of late afternoon light."
                 },
                 {
                     id: 5,
@@ -177,12 +97,8 @@
                     price: 1100,
                     medium: "Mixed Media",
                     size: "24\" x 24\"",
-                    category: "abstract",
-                    year: "2024",
-                    image: "https://via.placeholder.com/800x800/BB8FCE/FFFFFF?text=Abstract+Harmony",
-                    description: "Bold geometric forms dancing in perfect compositional balance. This piece combines acrylic, charcoal, and gold leaf to create depth and texture.",
-                    inStock: true,
-                    featured: false
+                    image: "https://via.placeholder.com/800x800/BB8FCE/FFFFFF?text=Artwork+5",
+                    description: "Bold geometric forms dancing in perfect compositional balance."
                 },
                 {
                     id: 6,
@@ -191,60 +107,10 @@
                     price: 1800,
                     medium: "Oil on Canvas",
                     size: "36\" x 48\"",
-                    category: "landscape",
-                    year: "2024",
-                    image: "https://via.placeholder.com/800x800/85C1E2/FFFFFF?text=Mountain+Majesty",
-                    description: "Majestic peaks rendered with dramatic light and atmospheric depth. Inspired by alpine expeditions and the sublime power of nature.",
-                    inStock: true,
-                    featured: true
-                },
-                {
-                    id: 7,
-                    title: "Midnight Reverie",
-                    artist: "Clementine",
-                    price: 1350,
-                    medium: "Oil on Canvas",
-                    size: "30\" x 30\"",
-                    category: "abstract",
-                    year: "2024",
-                    image: "https://via.placeholder.com/800x800/2C3E50/FFFFFF?text=Midnight+Reverie",
-                    description: "Deep blues and purples intertwine in this contemplative piece exploring themes of introspection and the quiet beauty of nighttime.",
-                    inStock: true,
-                    featured: false
-                },
-                {
-                    id: 8,
-                    title: "Spring Awakening",
-                    artist: "Clementine",
-                    price: 920,
-                    medium: "Acrylic on Canvas",
-                    size: "22\" x 28\"",
-                    category: "landscape",
-                    year: "2023",
-                    image: "https://via.placeholder.com/800x800/98D8C8/FFFFFF?text=Spring+Awakening",
-                    description: "Fresh greens and delicate florals celebrate the renewal of life. This piece captures the joy and optimism of spring's arrival.",
-                    inStock: true,
-                    featured: false
-                },
-                {
-                    id: 9,
-                    title: "Crimson Tide",
-                    artist: "Clementine",
-                    price: 1650,
-                    medium: "Oil on Canvas",
-                    size: "32\" x 44\"",
-                    category: "abstract",
-                    year: "2024",
-                    image: "https://via.placeholder.com/800x800/E74C3C/FFFFFF?text=Crimson+Tide",
-                    description: "Bold reds sweep across the canvas in powerful waves of emotion and energy. A statement piece that commands attention.",
-                    inStock: true,
-                    featured: true
+                    image: "https://via.placeholder.com/800x800/85C1E2/FFFFFF?text=Artwork+6",
+                    description: "Majestic peaks rendered with dramatic light and atmospheric depth."
                 }
             ];
-
-            const filteredArtworks = filter === 'all' 
-                ? artworks 
-                : artworks.filter(art => art.category === filter);
 
             const addToCart = (artwork) => {
                 const existing = cart.find(item => item.id === artwork.id);
@@ -257,8 +123,6 @@
                 } else {
                     setCart([...cart, {...artwork, quantity: 1}]);
                 }
-                setShowSuccess(true);
-                setTimeout(() => setShowSuccess(false), 2000);
             };
 
             const updateQuantity = (id, delta) => {
@@ -279,145 +143,120 @@
             const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
             return (
-                <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-gray-50">
-                    {/* Success Notification */}
-                    {showSuccess && (
-                        <div className="fixed top-24 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in">
-                            <Check size={20} />
-                            <span>Added to cart!</span>
-                        </div>
-                    )}
-
+                <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
                     {/* Header */}
-                    <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40 border-b border-gray-100">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="flex justify-between items-center py-6">
+                    <header className="bg-white shadow-md sticky top-0 z-40">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                            <div className="flex justify-between items-center">
                                 <div>
-                                    <h1 className="text-4xl font-bold gradient-text">Clementine</h1>
-                                    <p className="text-gray-600 mt-1 text-sm font-light tracking-wide">Contemporary Fine Art</p>
+                                    <h1 className="text-3xl font-bold text-gray-900">Clementine</h1>
+                                    <p className="text-gray-600 mt-1">Contemporary Artist</p>
                                 </div>
-                                <div className="flex items-center gap-6">
-                                    <nav className="hidden md:flex gap-6">
-                                        <a href="#gallery" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">Gallery</a>
-                                        <a href="#about" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">About</a>
-                                        <a href="#contact" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">Contact</a>
-                                    </nav>
-                                    <button
-                                        onClick={() => setShowCart(!showCart)}
-                                        className="relative bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2"
-                                    >
-                                        <ShoppingCart size={20} />
-                                        <span className="font-medium">Cart</span>
-                                        {cartCount > 0 && (
-                                            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold badge">
-                                                {cartCount}
-                                            </span>
-                                        )}
-                                    </button>
-                                </div>
+                                <button
+                                    onClick={() => setShowCart(!showCart)}
+                                    className="relative bg-slate-900 text-white px-6 py-3 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2"
+                                >
+                                    <ShoppingCart size={20} />
+                                    <span>Cart</span>
+                                    {cartCount > 0 && (
+                                        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                                            {cartCount}
+                                        </span>
+                                    )}
+                                </button>
                             </div>
                         </div>
                     </header>
 
                     {/* Hero Section */}
-                    <section className="relative py-20 px-4 overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-indigo-600/10"></div>
-                        <div className="max-w-7xl mx-auto text-center relative z-10">
-                            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 serif">Discover Original Art</h2>
-                            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
-                                Explore a curated collection of contemporary paintings and mixed media works. 
-                                Each piece is an authentic original, signed and certified by the artist.
+                    <div className="relative bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white">
+                        <div className="absolute inset-0 bg-black opacity-50"></div>
+                        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+                            <h2 className="text-5xl md:text-6xl font-bold mb-6">Original Artwork Collection</h2>
+                            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-8">
+                                Discover unique pieces that blend contemporary vision with timeless technique
                             </p>
-                            <div className="flex justify-center gap-4 flex-wrap">
-                                <span className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm text-gray-700">
-                                    <Check size={16} className="text-green-500" />
-                                    Free Shipping
-                                </span>
-                                <span className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm text-gray-700">
-                                    <Check size={16} className="text-green-500" />
-                                    Certificate of Authenticity
-                                </span>
-                                <span className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm text-gray-700">
-                                    <Check size={16} className="text-green-500" />
-                                    30-Day Returns
-                                </span>
+                            <button 
+                                onClick={() => document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' })}
+                                className="bg-white text-slate-900 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors"
+                            >
+                                Explore Collection
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* About Section */}
+                    <div className="bg-white py-16">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="grid md:grid-cols-2 gap-12 items-center">
+                                <div>
+                                    <h3 className="text-3xl font-bold text-gray-900 mb-4">About the Artist</h3>
+                                    <p className="text-gray-700 mb-4">
+                                        Clementine is a contemporary artist whose work explores the intersection of color, 
+                                        emotion, and form. With over a decade of experience, her pieces have been featured in 
+                                        galleries across North America.
+                                    </p>
+                                    <p className="text-gray-700 mb-6">
+                                        Each painting is meticulously crafted using traditional techniques combined with 
+                                        modern sensibilities, resulting in artwork that speaks to both the heart and mind.
+                                    </p>
+                                    <div className="flex gap-4">
+                                        <div className="text-center">
+                                            <div className="text-3xl font-bold text-slate-900">150+</div>
+                                            <div className="text-gray-600">Artworks Created</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-3xl font-bold text-slate-900">12+</div>
+                                            <div className="text-gray-600">Years Experience</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-3xl font-bold text-slate-900">500+</div>
+                                            <div className="text-gray-600">Happy Collectors</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-gray-200 rounded-lg h-96 flex items-center justify-center">
+                                    <span className="text-gray-500 text-lg">Artist Photo Placeholder</span>
+                                </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
-                    {/* Filter Section */}
-                    <section id="gallery" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-                        <div className="flex justify-center gap-4 flex-wrap">
-                            <button
-                                onClick={() => setFilter('all')}
-                                className={`px-6 py-2 rounded-full font-medium transition-all ${
-                                    filter === 'all' 
-                                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md' 
-                                        : 'bg-white text-gray-700 hover:bg-gray-100'
-                                }`}
-                            >
-                                All Works
-                            </button>
-                            <button
-                                onClick={() => setFilter('landscape')}
-                                className={`px-6 py-2 rounded-full font-medium transition-all ${
-                                    filter === 'landscape' 
-                                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md' 
-                                        : 'bg-white text-gray-700 hover:bg-gray-100'
-                                }`}
-                            >
-                                Landscapes
-                            </button>
-                            <button
-                                onClick={() => setFilter('abstract')}
-                                className={`px-6 py-2 rounded-full font-medium transition-all ${
-                                    filter === 'abstract' 
-                                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md' 
-                                        : 'bg-white text-gray-700 hover:bg-gray-100'
-                                }`}
-                            >
-                                Abstract
-                            </button>
+                    {/* Gallery Section */}
+                    <div id="gallery" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                        <div className="mb-12 text-center">
+                            <h3 className="text-4xl font-bold text-gray-900 mb-4">Featured Collection</h3>
+                            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+                                Explore a curated collection of original paintings and mixed media works. 
+                                Each piece is an authentic original, signed by the artist and comes with a certificate of authenticity.
+                            </p>
                         </div>
-                    </section>
 
-                    {/* Art Grid */}
-                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {filteredArtworks.map(art => (
+                            {artworks.map(art => (
                                 <div 
                                     key={art.id}
-                                    className="art-card bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer"
+                                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow cursor-pointer"
                                     onClick={() => setSelectedArt(art)}
                                 >
-                                    {art.featured && (
-                                        <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-amber-400 to-amber-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-md">
-                                            Featured
-                                        </div>
-                                    )}
-                                    <div className="relative aspect-square overflow-hidden bg-gray-100">
+                                    <div className="aspect-square overflow-hidden bg-gray-100">
                                         <img 
                                             src={art.image} 
                                             alt={art.title}
-                                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                         />
                                     </div>
                                     <div className="p-6">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <h3 className="text-xl font-bold text-gray-900 serif">{art.title}</h3>
-                                            <span className="text-sm text-gray-500">{art.year}</span>
-                                        </div>
+                                        <h3 className="text-xl font-bold text-gray-900 mb-2">{art.title}</h3>
                                         <p className="text-gray-600 text-sm mb-3">{art.medium} • {art.size}</p>
-                                        <div className="flex justify-between items-center mt-4">
-                                            <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                                                ${art.price.toLocaleString()}
-                                            </span>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-2xl font-bold text-slate-900">${art.price.toLocaleString()}</span>
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     addToCart(art);
                                                 }}
-                                                className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-5 py-2.5 rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all font-medium shadow-md hover:shadow-lg"
+                                                className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors"
                                             >
                                                 Add to Cart
                                             </button>
@@ -426,96 +265,119 @@
                                 </div>
                             ))}
                         </div>
-                    </main>
+                    </div>
 
-                    {/* About Section */}
-                    <section id="about" className="bg-white py-20 px-4">
-                        <div className="max-w-4xl mx-auto text-center">
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 serif">About Clementine</h2>
-                            <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                                Clementine is a contemporary artist whose work explores the intersection of color, emotion, and natural beauty. 
-                                With a background in fine arts and years of dedicated practice, each piece reflects a deep understanding of 
-                                composition and a unique artistic vision.
-                            </p>
-                            <p className="text-lg text-gray-700 leading-relaxed">
-                                Working primarily with oils, acrylics, and mixed media, Clementine creates pieces that invite viewers 
-                                to pause and contemplate the beauty found in both the natural world and abstract expression.
-                            </p>
-                        </div>
-                    </section>
-
-                    {/* Contact Section */}
-                    <section id="contact" className="py-20 px-4 bg-gradient-to-br from-purple-50 to-indigo-50">
-                        <div className="max-w-4xl mx-auto text-center">
-                            <h2 className="text-4xl font-bold text-gray-900 mb-6 serif">Get In Touch</h2>
-                            <p className="text-lg text-gray-700 mb-8">
-                                Interested in commissioning a piece or learning more about available works?
-                            </p>
-                            <div className="flex justify-center gap-6">
-                                <a href="mailto:art@clementine.com" className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-md hover:shadow-lg transition-all text-gray-700 font-medium">
-                                    <Mail size={20} />
-                                    art@clementine.com
-                                </a>
-                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-md hover:shadow-lg transition-all text-gray-700 font-medium">
-                                    <Instagram size={20} />
-                                    @clementine.art
-                                </a>
+                    {/* Features Section */}
+                    <div className="bg-gray-50 py-16">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="grid md:grid-cols-3 gap-8">
+                                <div className="text-center">
+                                    <div className="bg-slate-900 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                                        ✓
+                                    </div>
+                                    <h4 className="text-xl font-bold text-gray-900 mb-2">Authentic Originals</h4>
+                                    <p className="text-gray-600">
+                                        Every piece is an original artwork, hand-signed by the artist with certificate of authenticity
+                                    </p>
+                                </div>
+                                <div className="text-center">
+                                    <div className="bg-slate-900 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                                        🚚
+                                    </div>
+                                    <h4 className="text-xl font-bold text-gray-900 mb-2">Secure Shipping</h4>
+                                    <p className="text-gray-600">
+                                        Professional packaging and insured shipping to ensure your artwork arrives safely
+                                    </p>
+                                </div>
+                                <div className="text-center">
+                                    <div className="bg-slate-900 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                                        💬
+                                    </div>
+                                    <h4 className="text-xl font-bold text-gray-900 mb-2">Expert Support</h4>
+                                    <p className="text-gray-600">
+                                        Questions about a piece? Contact us for detailed information and personalized assistance
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
                     {/* Footer */}
-                    <footer className="bg-gray-900 text-white py-12 px-4">
-                        <div className="max-w-7xl mx-auto text-center">
-                            <h3 className="text-2xl font-bold mb-2 serif">Clementine</h3>
-                            <p className="text-gray-400 mb-4">Contemporary Fine Art</p>
-                            <p className="text-gray-500 text-sm">© 2024 Clementine. All rights reserved.</p>
+                    <footer className="bg-slate-900 text-white py-12">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="grid md:grid-cols-3 gap-8">
+                                <div>
+                                    <h4 className="text-xl font-bold mb-4">Clementine</h4>
+                                    <p className="text-gray-400">
+                                        Contemporary artist creating original works that inspire and captivate.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 className="text-xl font-bold mb-4">Quick Links</h4>
+                                    <ul className="space-y-2 text-gray-400">
+                                        <li><a href="#gallery" className="hover:text-white transition-colors">Gallery</a></li>
+                                        <li><a href="#" className="hover:text-white transition-colors">About</a></li>
+                                        <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                                        <li><a href="#" className="hover:text-white transition-colors">Shipping Info</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 className="text-xl font-bold mb-4">Contact</h4>
+                                    <p className="text-gray-400 mb-2">Email: info@clementineart.com</p>
+                                    <p className="text-gray-400 mb-4">Phone: (555) 123-4567</p>
+                                    <div className="flex gap-4">
+                                        <a href="#" className="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                                        <a href="#" className="text-gray-400 hover:text-white transition-colors">Facebook</a>
+                                        <a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                                <p>© 2024 Clementine. All rights reserved.</p>
+                            </div>
                         </div>
                     </footer>
 
                     {/* Shopping Cart Sidebar */}
                     {showCart && (
                         <div className="fixed inset-0 z-50 overflow-hidden">
-                            <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={() => setShowCart(false)} />
+                            <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setShowCart(false)} />
                             <div className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col">
-                                <div className="p-6 border-b flex justify-between items-center bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
-                                    <h2 className="text-2xl font-bold serif">Your Cart</h2>
-                                    <button onClick={() => setShowCart(false)} className="hover:opacity-75 transition-opacity">
+                                <div className="p-6 border-b flex justify-between items-center">
+                                    <h2 className="text-2xl font-bold">Shopping Cart</h2>
+                                    <button onClick={() => setShowCart(false)} className="text-gray-500 hover:text-gray-700">
                                         <X size={24} />
                                     </button>
                                 </div>
                                 
                                 <div className="flex-1 overflow-y-auto p-6">
                                     {cart.length === 0 ? (
-                                        <div className="text-center mt-16">
-                                            <ShoppingCart size={64} className="mx-auto text-gray-300 mb-4" />
-                                            <p className="text-gray-500">Your cart is empty</p>
-                                        </div>
+                                        <p className="text-gray-500 text-center mt-8">Your cart is empty</p>
                                     ) : (
                                         <div className="space-y-4">
                                             {cart.map(item => (
-                                                <div key={item.id} className="flex gap-4 bg-gray-50 p-4 rounded-xl">
-                                                    <img src={item.image} alt={item.title} className="w-24 h-24 object-cover rounded-lg" />
+                                                <div key={item.id} className="flex gap-4 bg-gray-50 p-4 rounded-lg">
+                                                    <img src={item.image} alt={item.title} className="w-20 h-20 object-cover rounded" />
                                                     <div className="flex-1">
-                                                        <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
-                                                        <p className="text-sm text-gray-600 mb-2">${item.price.toLocaleString()}</p>
-                                                        <div className="flex items-center gap-3">
+                                                        <h3 className="font-semibold text-gray-900">{item.title}</h3>
+                                                        <p className="text-sm text-gray-600">${item.price.toLocaleString()}</p>
+                                                        <div className="flex items-center gap-3 mt-2">
                                                             <button
                                                                 onClick={() => updateQuantity(item.id, -1)}
-                                                                className="w-8 h-8 flex items-center justify-center bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                                                                className="w-7 h-7 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300"
                                                             >
                                                                 <Minus size={14} />
                                                             </button>
-                                                            <span className="font-semibold w-8 text-center">{item.quantity}</span>
+                                                            <span className="font-semibold">{item.quantity}</span>
                                                             <button
                                                                 onClick={() => updateQuantity(item.id, 1)}
-                                                                className="w-8 h-8 flex items-center justify-center bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                                                                className="w-7 h-7 flex items-center justify-center bg-gray-200 rounded hover:bg-gray-300"
                                                             >
                                                                 <Plus size={14} />
                                                             </button>
                                                             <button
                                                                 onClick={() => removeFromCart(item.id)}
-                                                                className="ml-auto text-red-500 hover:text-red-700 text-sm font-medium"
+                                                                className="ml-auto text-red-500 hover:text-red-700 text-sm"
                                                             >
                                                                 Remove
                                                             </button>
@@ -529,26 +391,13 @@
 
                                 {cart.length > 0 && (
                                     <div className="border-t p-6 bg-gray-50">
-                                        <div className="space-y-3 mb-6">
-                                            <div className="flex justify-between text-gray-600">
-                                                <span>Subtotal</span>
-                                                <span>${cartTotal.toLocaleString()}</span>
-                                            </div>
-                                            <div className="flex justify-between text-gray-600">
-                                                <span>Shipping</span>
-                                                <span className="text-green-600 font-medium">FREE</span>
-                                            </div>
-                                            <div className="border-t pt-3 flex justify-between items-center">
-                                                <span className="text-lg font-semibold">Total</span>
-                                                <span className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                                                    ${cartTotal.toLocaleString()}
-                                                </span>
-                                            </div>
+                                        <div className="flex justify-between items-center mb-4">
+                                            <span className="text-lg font-semibold">Total:</span>
+                                            <span className="text-2xl font-bold">${cartTotal.toLocaleString()}</span>
                                         </div>
-                                        <button className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all font-semibold text-lg shadow-lg hover:shadow-xl">
+                                        <button className="w-full bg-slate-900 text-white py-4 rounded-lg hover:bg-slate-800 transition-colors font-semibold">
                                             Proceed to Checkout
                                         </button>
-                                        <p className="text-xs text-gray-500 text-center mt-3">Secure checkout powered by Stripe</p>
                                     </div>
                                 )}
                             </div>
@@ -557,102 +406,53 @@
 
                     {/* Artwork Detail Modal */}
                     {selectedArt && (
-                        <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-75 backdrop-blur-sm flex items-center justify-center p-4">
-                            <div className="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-                                <div className="sticky top-0 bg-white border-b p-6 flex justify-between items-center z-10">
-                                    <div>
-                                        <h2 className="text-3xl font-bold text-gray-900 serif">{selectedArt.title}</h2>
-                                        <p className="text-gray-600 mt-1">{selectedArt.year}</p>
-                                    </div>
-                                    <button onClick={() => setSelectedArt(null)} className="text-gray-500 hover:text-gray-700 transition-colors p-2">
-                                        <X size={28} />
+                        <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-75 flex items-center justify-center p-4">
+                            <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                                <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+                                    <h2 className="text-2xl font-bold">{selectedArt.title}</h2>
+                                    <button onClick={() => setSelectedArt(null)} className="text-gray-500 hover:text-gray-700">
+                                        <X size={24} />
                                     </button>
                                 </div>
-                                <div className="p-8">
-                                    <div className="grid md:grid-cols-2 gap-10">
+                                <div className="p-6">
+                                    <div className="grid md:grid-cols-2 gap-8">
                                         <div>
-                                            <div className="rounded-xl overflow-hidden shadow-lg mb-4">
-                                                <img 
-                                                    src={selectedArt.image} 
-                                                    alt={selectedArt.title}
-                                                    className="w-full"
-                                                />
-                                            </div>
-                                            {selectedArt.featured && (
-                                                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md">
-                                                    ⭐ Featured Artwork
-                                                </div>
-                                            )}
+                                            <img 
+                                                src={selectedArt.image} 
+                                                alt={selectedArt.title}
+                                                className="w-full rounded-lg shadow-lg"
+                                            />
                                         </div>
                                         <div>
-                                            <div className="mb-6">
-                                                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Description</h3>
-                                                <p className="text-gray-700 leading-relaxed">{selectedArt.description}</p>
-                                            </div>
-                                            
-                                            <div className="space-y-4 mb-8 bg-gray-50 p-6 rounded-xl">
-                                                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                                                    <span className="font-semibold text-gray-700">Artist</span>
-                                                    <span className="text-gray-900">{selectedArt.artist}</span>
+                                            <p className="text-gray-700 mb-4">{selectedArt.description}</p>
+                                            <div className="space-y-3 mb-6">
+                                                <div className="flex justify-between border-b pb-2">
+                                                    <span className="font-semibold">Artist:</span>
+                                                    <span>{selectedArt.artist}</span>
                                                 </div>
-                                                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                                                    <span className="font-semibold text-gray-700">Medium</span>
-                                                    <span className="text-gray-900">{selectedArt.medium}</span>
+                                                <div className="flex justify-between border-b pb-2">
+                                                    <span className="font-semibold">Medium:</span>
+                                                    <span>{selectedArt.medium}</span>
                                                 </div>
-                                                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                                                    <span className="font-semibold text-gray-700">Size</span>
-                                                    <span className="text-gray-900">{selectedArt.size}</span>
+                                                <div className="flex justify-between border-b pb-2">
+                                                    <span className="font-semibold">Size:</span>
+                                                    <span>{selectedArt.size}</span>
                                                 </div>
-                                                <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                                                    <span className="font-semibold text-gray-700">Year</span>
-                                                    <span className="text-gray-900">{selectedArt.year}</span>
-                                                </div>
-                                                <div className="flex justify-between items-center py-3">
-                                                    <span className="font-semibold text-gray-700">Availability</span>
-                                                    <span className="inline-flex items-center gap-2 text-green-600 font-medium">
-                                                        <Check size={16} />
-                                                        In Stock
-                                                    </span>
+                                                <div className="flex justify-between border-b pb-2">
+                                                    <span className="font-semibold">Price:</span>
+                                                    <span className="text-2xl font-bold">${selectedArt.price.toLocaleString()}</span>
                                                 </div>
                                             </div>
-
-                                            <div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-xl mb-6">
-                                                <div className="flex justify-between items-center mb-4">
-                                                    <span className="text-gray-700 font-medium">Price</span>
-                                                    <span className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                                                        ${selectedArt.price.toLocaleString()}
-                                                    </span>
-                                                </div>
-                                                <ul className="space-y-2 text-sm text-gray-600 mb-4">
-                                                    <li className="flex items-center gap-2">
-                                                        <Check size={16} className="text-green-600" />
-                                                        Certificate of Authenticity included
-                                                    </li>
-                                                    <li className="flex items-center gap-2">
-                                                        <Check size={16} className="text-green-600" />
-                                                        Free insured shipping
-                                                    </li>
-                                                    <li className="flex items-center gap-2">
-                                                        <Check size={16} className="text-green-600" />
-                                                        30-day money-back guarantee
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            
                                             <button
                                                 onClick={() => {
                                                     addToCart(selectedArt);
                                                     setSelectedArt(null);
                                                     setShowCart(true);
                                                 }}
-                                                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all font-semibold text-lg shadow-lg hover:shadow-xl"
+                                                className="w-full bg-slate-900 text-white py-4 rounded-lg hover:bg-slate-800 transition-colors font-semibold"
                                             >
                                                 Add to Cart
                                             </button>
-                                            
-                                            <p className="text-xs text-gray-500 text-center mt-4">
-                                                Have questions? <a href="#contact" className="text-purple-600 hover:underline font-medium">Contact us</a>
-                                            </p>
                                         </div>
                                     </div>
                                 </div>
