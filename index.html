@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Li - Art Gallery</title>
+    <title>Clementime - Art Gallery</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -144,6 +144,69 @@
             text-align: center;
             margin-top: 20px;
         }
+        
+        .section-padding {
+            padding: 80px 0;
+        }
+        
+        .nav-link {
+            position: relative;
+            padding: 8px 0;
+            color: #6b7280;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #8b5cf6;
+        }
+        
+        .nav-link.active {
+            color: #8b5cf6;
+            font-weight: 600;
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border-radius: 24px;
+            padding: 80px 40px;
+            margin: 40px 0;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        }
+        
+        .exhibition-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .exhibition-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 <body>
@@ -187,6 +250,14 @@
             </svg>
         );
 
+        const Menu = ({ size = 24, color = "currentColor" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        );
+
         const ArtGallery = () => {
             const [cart, setCart] = useState([]);
             const [showCart, setShowCart] = useState(false);
@@ -194,6 +265,8 @@
             const [showCheckout, setShowCheckout] = useState(false);
             const [formStatus, setFormStatus] = useState({ type: '', message: '' });
             const [isSubmitting, setIsSubmitting] = useState(false);
+            const [activeSection, setActiveSection] = useState('home');
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
             // Contact form state
             const [contactForm, setContactForm] = useState({
@@ -211,7 +284,7 @@
                 {
                     id: 1,
                     title: "Sunset Dreams",
-                    artist: "Lissa Belyea",
+                    artist: "Clementime",
                     price: 1200,
                     medium: "Oil on Canvas",
                     size: "24\" x 36\"",
@@ -221,7 +294,7 @@
                 {
                     id: 2,
                     title: "Urban Pulse",
-                    artist: "Lissa Belyea",
+                    artist: "Clementime",
                     price: 950,
                     medium: "Acrylic on Canvas",
                     size: "20\" x 30\"",
@@ -231,7 +304,7 @@
                 {
                     id: 3,
                     title: "Ethereal Waters",
-                    artist: "Lissa Belyea",
+                    artist: "Clementime",
                     price: 1500,
                     medium: "Oil on Canvas",
                     size: "30\" x 40\"",
@@ -241,7 +314,7 @@
                 {
                     id: 4,
                     title: "Golden Hour",
-                    artist: "Lissa Belyea",
+                    artist: "Clementime",
                     price: 850,
                     medium: "Watercolor",
                     size: "18\" x 24\"",
@@ -251,7 +324,7 @@
                 {
                     id: 5,
                     title: "Abstract Harmony",
-                    artist: "Lissa Belyea",
+                    artist: "Clementime",
                     price: 1100,
                     medium: "Mixed Media",
                     size: "24\" x 24\"",
@@ -261,12 +334,60 @@
                 {
                     id: 6,
                     title: "Mountain Majesty",
-                    artist: "Lissa Belyea",
+                    artist: "Clementime",
                     price: 1800,
                     medium: "Oil on Canvas",
                     size: "36\" x 48\"",
                     image: "https://images.unsplash.com/photo-1578321272607-69c21841c24e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
                     description: "Majestic peaks rendered with dramatic light and atmospheric depth. Rich purples in the shadows contrast with golden highlights on the mountain ridges."
+                }
+            ];
+
+            const testimonials = [
+                {
+                    id: 1,
+                    name: "Sarah Johnson",
+                    role: "Art Collector",
+                    content: "Clementime's work has transformed my living space. The vibrant colors and emotional depth in each piece create an atmosphere of joy and contemplation.",
+                    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+                },
+                {
+                    id: 2,
+                    name: "Michael Torres",
+                    role: "Gallery Owner",
+                    content: "Working with Clementime has been a privilege. Her unique perspective and mastery of color theory make her one of the most exciting contemporary artists today.",
+                    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+                },
+                {
+                    id: 3,
+                    name: "Emma Richardson",
+                    role: "Interior Designer",
+                    content: "I regularly recommend Clementime's work to clients looking for statement pieces. The energy and emotion in her art elevates any space it inhabits.",
+                    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+                }
+            ];
+
+            const exhibitions = [
+                {
+                    id: 1,
+                    title: "Chromatic Dreams",
+                    location: "Modern Art Gallery, New York",
+                    date: "June 15 - August 20, 2023",
+                    image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    id: 2,
+                    title: "Urban Impressions",
+                    location: "Contemporary Arts Center, Chicago",
+                    date: "September 5 - November 12, 2023",
+                    image: "https://images.unsplash.com/photo-1578321272177-44c1864f0d76?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    id: 3,
+                    title: "Elements of Color",
+                    location: "West Coast Art Museum, Los Angeles",
+                    date: "January 10 - March 25, 2024",
+                    image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
                 }
             ];
 
@@ -382,76 +503,410 @@
                 }
             };
 
+            const scrollToSection = (sectionId) => {
+                setActiveSection(sectionId);
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    window.scrollTo({
+                        top: element.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+                setMobileMenuOpen(false);
+            };
+
             const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-            return (
-                <div className="min-h-screen gradient-bg">
-                    <header className="header-gradient shadow-lg sticky top-0 z-40">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                            <div className="flex justify-between items-center">
-                                <div>
-                                    <h1 className="text-4xl font-display font-bold text-white">Lissa Belyea</h1>
-                                    <p className="text-purple-100 mt-1 text-lg">Contemporary Artist</p>
+            // Render different sections based on activeSection
+            const renderSection = () => {
+                switch(activeSection) {
+                    case 'home':
+                        return (
+                            <>
+                                <div className="hero-section text-center">
+                                    <h1 className="text-5xl md:text-6xl font-display font-bold text-purple-900 mb-6">Clementime</h1>
+                                    <p className="text-xl text-purple-700 max-w-2xl mx-auto mb-8">
+                                        Contemporary artist exploring the intersection of color, emotion, and form through vibrant mixed media works.
+                                    </p>
+                                    <button 
+                                        onClick={() => scrollToSection('gallery')}
+                                        className="btn-primary text-lg"
+                                    >
+                                        View Collection
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={() => setShowCart(!showCart)}
-                                    className="btn-secondary relative flex items-center gap-2"
-                                >
-                                    <ShoppingCart size={20} color="white" />
-                                    <span>Cart</span>
-                                    {cartCount > 0 && (
-                                        <span className="cart-badge absolute -top-2 -right-2">
-                                            {cartCount}
-                                        </span>
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-                    </header>
-
-                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                        <div className="mb-16 text-center">
-                            <h2 className="text-4xl font-display font-bold text-purple-900 mb-4">Art Collection</h2>
-                            <p className="text-lg text-purple-700 max-w-3xl mx-auto">
-                                Explore a curated collection of original paintings and mixed media works. 
-                                Each piece is an authentic original, signed by the artist with a certificate of authenticity.
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {artworks.map(art => (
-                                <div 
-                                    key={art.id}
-                                    className="artwork-card bg-white cursor-pointer"
-                                    onClick={() => setSelectedArt(art)}
-                                >
-                                    <div className="aspect-square overflow-hidden bg-gray-100">
-                                        <img 
-                                            src={art.image} 
-                                            alt={art.title}
-                                            className="w-full h-full object-cover artwork-image"
-                                        />
+                                
+                                <div id="gallery" className="section-padding">
+                                    <div className="mb-16 text-center">
+                                        <h2 className="text-4xl font-display font-bold text-purple-900 mb-4">Art Collection</h2>
+                                        <p className="text-lg text-purple-700 max-w-3xl mx-auto">
+                                            Explore a curated collection of original paintings and mixed media works. 
+                                            Each piece is an authentic original, signed by the artist with a certificate of authenticity.
+                                        </p>
                                     </div>
-                                    <div className="p-6">
-                                        <h3 className="text-xl font-bold text-purple-900 mb-2">{art.title}</h3>
-                                        <p className="text-purple-600 text-sm mb-3">{art.medium} • {art.size}</p>
-                                        <div className="flex justify-between items-center">
-                                            <span className="price-tag">${art.price.toLocaleString()}</span>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    addToCart(art);
-                                                }}
-                                                className="btn-primary"
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        {artworks.map(art => (
+                                            <div 
+                                                key={art.id}
+                                                className="artwork-card bg-white cursor-pointer"
+                                                onClick={() => setSelectedArt(art)}
                                             >
-                                                Add to Cart
-                                            </button>
+                                                <div className="aspect-square overflow-hidden bg-gray-100">
+                                                    <img 
+                                                        src={art.image} 
+                                                        alt={art.title}
+                                                        className="w-full h-full object-cover artwork-image"
+                                                        onError={(e) => {
+                                                            e.target.src = "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="p-6">
+                                                    <h3 className="text-xl font-bold text-purple-900 mb-2">{art.title}</h3>
+                                                    <p className="text-purple-600 text-sm mb-3">{art.medium} • {art.size}</p>
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="price-tag">${art.price.toLocaleString()}</span>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                addToCart(art);
+                                                            }}
+                                                            className="btn-primary"
+                                                        >
+                                                            Add to Cart
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
+                        );
+                    case 'about':
+                        return (
+                            <div id="about" className="section-padding">
+                                <div className="max-w-4xl mx-auto">
+                                    <h2 className="text-4xl font-display font-bold text-purple-900 mb-8 text-center">About Clementime</h2>
+                                    
+                                    <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+                                        <div>
+                                            <img 
+                                                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                                                alt="Clementime in her studio"
+                                                className="rounded-2xl shadow-lg w-full"
+                                            />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-2xl font-display font-bold text-purple-900 mb-4">Artist Statement</h3>
+                                            <p className="text-purple-700 mb-4">
+                                                My work explores the emotional resonance of color and the dialogue between organic forms and geometric structure. 
+                                                Through a vibrant palette of purples, mustards, and complementary hues, I seek to capture moments of transition 
+                                                and transformation in both natural and urban landscapes.
+                                            </p>
+                                            <p className="text-purple-700 mb-4">
+                                                Each piece begins as an intuitive response to color and form, evolving through layers of mixed media to create 
+                                                depth and texture. The resulting works invite viewers into contemplative spaces where emotion and perception intersect.
+                                            </p>
+                                            <p className="text-purple-700">
+                                                My process combines traditional painting techniques with experimental approaches, allowing each piece to develop 
+                                                its own unique voice while remaining connected to my overarching exploration of color theory and emotional landscape.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="bg-purple-50 rounded-2xl p-8 mb-16">
+                                        <h3 className="text-2xl font-display font-bold text-purple-900 mb-6 text-center">Artist Biography</h3>
+                                        <div className="grid md:grid-cols-2 gap-8">
+                                            <div>
+                                                <h4 className="text-xl font-bold text-purple-800 mb-3">Education & Training</h4>
+                                                <ul className="text-purple-700 space-y-2">
+                                                    <li>• MFA in Painting, Rhode Island School of Design</li>
+                                                    <li>• BFA in Visual Arts, School of the Art Institute of Chicago</li>
+                                                    <li>• Residency Program, Skowhegan School of Painting and Sculpture</li>
+                                                    <li>• Advanced Color Theory Studies, Royal College of Art, London</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-xl font-bold text-purple-800 mb-3">Awards & Recognition</h4>
+                                                <ul className="text-purple-700 space-y-2">
+                                                    <li>• Contemporary Art Prize, 2022</li>
+                                                    <li>• Emerging Artist Grant, National Endowment for the Arts</li>
+                                                    <li>• Featured in "New American Paintings"</li>
+                                                    <li>• Artist-in-Residence, Vermont Studio Center</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="text-2xl font-display font-bold text-purple-900 mb-6 text-center">Testimonials</h3>
+                                        <div className="grid md:grid-cols-3 gap-6">
+                                            {testimonials.map(testimonial => (
+                                                <div key={testimonial.id} className="testimonial-card">
+                                                    <div className="flex items-center mb-4">
+                                                        <img 
+                                                            src={testimonial.image} 
+                                                            alt={testimonial.name}
+                                                            className="w-12 h-12 rounded-full object-cover mr-4"
+                                                        />
+                                                        <div>
+                                                            <h4 className="font-bold text-purple-900">{testimonial.name}</h4>
+                                                            <p className="text-purple-600 text-sm">{testimonial.role}</p>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-purple-700 italic">"{testimonial.content}"</p>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
-                            ))}
+                            </div>
+                        );
+                    case 'exhibitions':
+                        return (
+                            <div id="exhibitions" className="section-padding">
+                                <div className="max-w-4xl mx-auto">
+                                    <h2 className="text-4xl font-display font-bold text-purple-900 mb-8 text-center">Exhibitions</h2>
+                                    
+                                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                                        {exhibitions.map(exhibition => (
+                                            <div key={exhibition.id} className="exhibition-card">
+                                                <div className="aspect-video overflow-hidden">
+                                                    <img 
+                                                        src={exhibition.image} 
+                                                        alt={exhibition.title}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                                <div className="p-6">
+                                                    <h3 className="text-xl font-bold text-purple-900 mb-2">{exhibition.title}</h3>
+                                                    <p className="text-purple-600 mb-2">{exhibition.location}</p>
+                                                    <p className="text-purple-500 text-sm">{exhibition.date}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    
+                                    <div className="bg-purple-50 rounded-2xl p-8 text-center">
+                                        <h3 className="text-2xl font-display font-bold text-purple-900 mb-4">Upcoming Shows</h3>
+                                        <p className="text-purple-700 mb-6">
+                                            Clementime will be featured in several group and solo exhibitions throughout 2024. 
+                                            Check back regularly for updates on upcoming shows and events.
+                                        </p>
+                                        <button className="btn-primary">
+                                            Contact for Exhibition Inquiries
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    case 'contact':
+                        return (
+                            <div id="contact" className="section-padding">
+                                <div className="max-w-4xl mx-auto">
+                                    <h2 className="text-4xl font-display font-bold text-purple-900 mb-8 text-center">Contact</h2>
+                                    
+                                    <div className="grid md:grid-cols-2 gap-12">
+                                        <div>
+                                            <h3 className="text-2xl font-display font-bold text-purple-900 mb-4">Get In Touch</h3>
+                                            <p className="text-purple-700 mb-6">
+                                                For inquiries about available works, commissions, or exhibition opportunities, 
+                                                please reach out using the contact form or through the information below.
+                                            </p>
+                                            
+                                            <div className="space-y-4">
+                                                <div className="flex items-start">
+                                                    <div className="bg-purple-100 p-3 rounded-lg mr-4">
+                                                        <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-purple-900">Email</h4>
+                                                        <p className="text-purple-700">info@clementimeart.com</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="flex items-start">
+                                                    <div className="bg-purple-100 p-3 rounded-lg mr-4">
+                                                        <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-purple-900">Studio</h4>
+                                                        <p className="text-purple-700">Portland, Oregon</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="flex items-start">
+                                                    <div className="bg-purple-100 p-3 rounded-lg mr-4">
+                                                        <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-purple-900">Response Time</h4>
+                                                        <p className="text-purple-700">Within 48 hours</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <form className="space-y-4">
+                                                <div>
+                                                    <label className="block text-purple-900 font-medium mb-2">Name</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-input w-full"
+                                                        placeholder="Your name"
+                                                    />
+                                                </div>
+                                                
+                                                <div>
+                                                    <label className="block text-purple-900 font-medium mb-2">Email</label>
+                                                    <input
+                                                        type="email"
+                                                        className="form-input w-full"
+                                                        placeholder="Your email address"
+                                                    />
+                                                </div>
+                                                
+                                                <div>
+                                                    <label className="block text-purple-900 font-medium mb-2">Subject</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-input w-full"
+                                                        placeholder="Subject of your message"
+                                                    />
+                                                </div>
+                                                
+                                                <div>
+                                                    <label className="block text-purple-900 font-medium mb-2">Message</label>
+                                                    <textarea
+                                                        rows="5"
+                                                        className="form-input w-full"
+                                                        placeholder="Your message..."
+                                                    ></textarea>
+                                                </div>
+                                                
+                                                <button type="submit" className="btn-primary w-full">
+                                                    Send Message
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    default:
+                        return null;
+                }
+            };
+
+            return (
+                <div className="min-h-screen gradient-bg">
+                    <header className="header-gradient shadow-lg sticky top-0 z-50">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                            <div className="flex justify-between items-center">
+                                <div className="flex items-center">
+                                    <h1 className="text-3xl font-display font-bold text-white">Clementime</h1>
+                                    <p className="text-purple-100 ml-4 hidden md:block">Contemporary Artist</p>
+                                </div>
+                                
+                                {/* Desktop Navigation */}
+                                <nav className="hidden md:flex space-x-8">
+                                    <button 
+                                        onClick={() => scrollToSection('home')}
+                                        className={`nav-link ${activeSection === 'home' ? 'active' : ''}`}
+                                    >
+                                        Home
+                                    </button>
+                                    <button 
+                                        onClick={() => scrollToSection('about')}
+                                        className={`nav-link ${activeSection === 'about' ? 'active' : ''}`}
+                                    >
+                                        About
+                                    </button>
+                                    <button 
+                                        onClick={() => scrollToSection('exhibitions')}
+                                        className={`nav-link ${activeSection === 'exhibitions' ? 'active' : ''}`}
+                                    >
+                                        Exhibitions
+                                    </button>
+                                    <button 
+                                        onClick={() => scrollToSection('contact')}
+                                        className={`nav-link ${activeSection === 'contact' ? 'active' : ''}`}
+                                    >
+                                        Contact
+                                    </button>
+                                </nav>
+                                
+                                <div className="flex items-center space-x-4">
+                                    <button
+                                        onClick={() => setShowCart(!showCart)}
+                                        className="btn-secondary relative flex items-center gap-2"
+                                    >
+                                        <ShoppingCart size={20} color="white" />
+                                        <span className="hidden sm:inline">Cart</span>
+                                        {cartCount > 0 && (
+                                            <span className="cart-badge absolute -top-2 -right-2">
+                                                {cartCount}
+                                            </span>
+                                        )}
+                                    </button>
+                                    
+                                    {/* Mobile menu button */}
+                                    <button 
+                                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                        className="md:hidden text-white p-2"
+                                    >
+                                        <Menu size={24} />
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {/* Mobile Navigation */}
+                            {mobileMenuOpen && (
+                                <div className="md:hidden mt-4 pb-4">
+                                    <div className="flex flex-col space-y-4">
+                                        <button 
+                                            onClick={() => scrollToSection('home')}
+                                            className={`nav-link text-white ${activeSection === 'home' ? 'active' : ''}`}
+                                        >
+                                            Home
+                                        </button>
+                                        <button 
+                                            onClick={() => scrollToSection('about')}
+                                            className={`nav-link text-white ${activeSection === 'about' ? 'active' : ''}`}
+                                        >
+                                            About
+                                        </button>
+                                        <button 
+                                            onClick={() => scrollToSection('exhibitions')}
+                                            className={`nav-link text-white ${activeSection === 'exhibitions' ? 'active' : ''}`}
+                                        >
+                                            Exhibitions
+                                        </button>
+                                        <button 
+                                            onClick={() => scrollToSection('contact')}
+                                            className={`nav-link text-white ${activeSection === 'contact' ? 'active' : ''}`}
+                                        >
+                                            Contact
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
+                    </header>
+
+                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        {renderSection()}
                     </main>
 
                     {showCart && (
@@ -477,7 +932,14 @@
                                             {cart.map(item => (
                                                 <div key={item.id} className="cart-item-gradient p-4">
                                                     <div className="flex gap-4">
-                                                        <img src={item.image} alt={item.title} className="w-20 h-20 object-cover rounded-lg" />
+                                                        <img 
+                                                            src={item.image} 
+                                                            alt={item.title} 
+                                                            className="w-20 h-20 object-cover rounded-lg"
+                                                            onError={(e) => {
+                                                                e.target.src = "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80";
+                                                            }}
+                                                        />
                                                         <div className="flex-1">
                                                             <h3 className="font-semibold text-purple-900">{item.title}</h3>
                                                             <p className="text-sm text-purple-600">${item.price.toLocaleString()}</p>
@@ -544,6 +1006,9 @@
                                                 src={selectedArt.image} 
                                                 alt={selectedArt.title}
                                                 className="w-full rounded-xl shadow-lg"
+                                                onError={(e) => {
+                                                    e.target.src = "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+                                                }}
                                             />
                                         </div>
                                         <div className="flex flex-col justify-between">
@@ -750,24 +1215,34 @@
                     
                     <footer className="bg-purple-900 text-white py-12 mt-16">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                <div>
-                                    <h3 className="text-2xl font-display font-bold mb-4">Lissa Belyea</h3>
-                                    <p className="text-purple-200">Contemporary artist creating vibrant, emotional works that explore color and form.</p>
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                                <div className="md:col-span-2">
+                                    <h3 className="text-2xl font-display font-bold mb-4">Clementime</h3>
+                                    <p className="text-purple-200 max-w-md">
+                                        Contemporary artist creating vibrant, emotional works that explore color and form through mixed media.
+                                    </p>
                                 </div>
                                 <div>
-                                    <h4 className="text-lg font-semibold mb-4">Contact</h4>
-                                    <p className="text-purple-200">Email: info@lissabelart.com</p>
-                                    <p className="text-purple-200">Studio: Portland, Oregon</p>
+                                    <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
+                                    <ul className="space-y-2">
+                                        <li><button onClick={() => scrollToSection('home')} className="text-purple-200 hover:text-white transition-colors">Home</button></li>
+                                        <li><button onClick={() => scrollToSection('about')} className="text-purple-200 hover:text-white transition-colors">About</button></li>
+                                        <li><button onClick={() => scrollToSection('exhibitions')} className="text-purple-200 hover:text-white transition-colors">Exhibitions</button></li>
+                                        <li><button onClick={() => scrollToSection('contact')} className="text-purple-200 hover:text-white transition-colors">Contact</button></li>
+                                    </ul>
                                 </div>
                                 <div>
-                                    <h4 className="text-lg font-semibold mb-4">Information</h4>
-                                    <p className="text-purple-200">All artworks come with a certificate of authenticity.</p>
-                                    <p className="text-purple-200">Shipping worldwide with insurance included.</p>
+                                    <h4 className="text-lg font-semibold mb-4">Connect</h4>
+                                    <ul className="space-y-2">
+                                        <li><a href="#" className="text-purple-200 hover:text-white transition-colors">Instagram</a></li>
+                                        <li><a href="#" className="text-purple-200 hover:text-white transition-colors">Facebook</a></li>
+                                        <li><a href="#" className="text-purple-200 hover:text-white transition-colors">Artsy</a></li>
+                                        <li><a href="#" className="text-purple-200 hover:text-white transition-colors">Newsletter</a></li>
+                                    </ul>
                                 </div>
                             </div>
                             <div className="border-t border-purple-700 mt-8 pt-8 text-center text-purple-300">
-                                <p>© {new Date().getFullYear()} Lissa Belyea Art. All rights reserved.</p>
+                                <p>© {new Date().getFullYear()} Clementime Art. All rights reserved.</p>
                             </div>
                         </div>
                     </footer>
