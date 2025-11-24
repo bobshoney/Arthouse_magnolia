@@ -8,6 +8,7 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
         
@@ -111,13 +112,45 @@
             border-radius: 12px;
             border: 1px solid rgba(139, 92, 246, 0.1);
         }
+        
+        .form-input {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .form-input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            outline: none;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .error-message {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div id="root"></div>
     
     <script type="text/babel">
-        const { useState } = React;
+        const { useState, useEffect } = React;
 
         // Lucide React Icons as inline SVG components
         const ShoppingCart = ({ size = 24, color = "currentColor" }) => (
@@ -148,16 +181,37 @@
             </svg>
         );
 
+        const Check = ({ size = 24, color = "currentColor" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        );
+
         const ArtGallery = () => {
             const [cart, setCart] = useState([]);
             const [showCart, setShowCart] = useState(false);
             const [selectedArt, setSelectedArt] = useState(null);
+            const [showCheckout, setShowCheckout] = useState(false);
+            const [formStatus, setFormStatus] = useState({ type: '', message: '' });
+            const [isSubmitting, setIsSubmitting] = useState(false);
+
+            // Contact form state
+            const [contactForm, setContactForm] = useState({
+                name: '',
+                email: '',
+                phone: '',
+                address: '',
+                city: '',
+                state: '',
+                zip: '',
+                message: ''
+            });
 
             const artworks = [
                 {
                     id: 1,
                     title: "Sunset Dreams",
-                    artist: "Clementine",
+                    artist: "Lissa Belyea",
                     price: 1200,
                     medium: "Oil on Canvas",
                     size: "24\" x 36\"",
@@ -167,7 +221,7 @@
                 {
                     id: 2,
                     title: "Urban Pulse",
-                    artist: "Clementine",
+                    artist: "Lissa Belyea",
                     price: 950,
                     medium: "Acrylic on Canvas",
                     size: "20\" x 30\"",
@@ -177,7 +231,7 @@
                 {
                     id: 3,
                     title: "Ethereal Waters",
-                    artist: "Clementine",
+                    artist: "Lissa Belyea",
                     price: 1500,
                     medium: "Oil on Canvas",
                     size: "30\" x 40\"",
@@ -187,7 +241,7 @@
                 {
                     id: 4,
                     title: "Golden Hour",
-                    artist: "Clementine",
+                    artist: "Lissa Belyea",
                     price: 850,
                     medium: "Watercolor",
                     size: "18\" x 24\"",
@@ -197,7 +251,7 @@
                 {
                     id: 5,
                     title: "Abstract Harmony",
-                    artist: "Clementine",
+                    artist: "Lissa Belyea",
                     price: 1100,
                     medium: "Mixed Media",
                     size: "24\" x 24\"",
@@ -207,7 +261,7 @@
                 {
                     id: 6,
                     title: "Mountain Majesty",
-                    artist: "Clementine",
+                    artist: "Lissa Belyea",
                     price: 1800,
                     medium: "Oil on Canvas",
                     size: "36\" x 48\"",
@@ -243,6 +297,91 @@
                 setCart(cart.filter(item => item.id !== id));
             };
 
+            const handleProceedToCheckout = () => {
+                setShowCart(false);
+                setShowCheckout(true);
+            };
+
+            const handleInputChange = (e) => {
+                const { name, value } = e.target;
+                setContactForm({
+                    ...contactForm,
+                    [name]: value
+                });
+            };
+
+            const handleSubmitContactForm = async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                
+                try {
+                    // In a real implementation, you would send this to a server
+                    // For this example, we'll simulate an API call
+                    
+                    // Prepare email content
+                    const emailContent = `
+                        New Art Purchase Inquiry from ${contactForm.name}
+                        
+                        Contact Information:
+                        Name: ${contactForm.name}
+                        Email: ${contactForm.email}
+                        Phone: ${contactForm.phone}
+                        
+                        Shipping Address:
+                        ${contactForm.address}
+                        ${contactForm.city}, ${contactForm.state} ${contactForm.zip}
+                        
+                        Message:
+                        ${contactForm.message}
+                        
+                        Cart Items:
+                        ${cart.map(item => `- ${item.title} (Qty: ${item.quantity}) - $${item.price}`).join('\n')}
+                        
+                        Total: $${cartTotal.toLocaleString()}
+                    `;
+                    
+                    // Simulate sending email (in a real app, you would use a service like EmailJS, SendGrid, etc.)
+                    console.log("Sending email to bobshoney@protonmail.com");
+                    console.log("Email content:", emailContent);
+                    
+                    // Simulate API delay
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    // Show success message
+                    setFormStatus({
+                        type: 'success',
+                        message: 'Thank you! Your inquiry has been sent. We will contact you shortly to complete your purchase.'
+                    });
+                    
+                    // Clear cart after successful submission
+                    setCart([]);
+                    
+                    // Reset form after 5 seconds and close checkout
+                    setTimeout(() => {
+                        setShowCheckout(false);
+                        setFormStatus({ type: '', message: '' });
+                        setContactForm({
+                            name: '',
+                            email: '',
+                            phone: '',
+                            address: '',
+                            city: '',
+                            state: '',
+                            zip: '',
+                            message: ''
+                        });
+                    }, 5000);
+                    
+                } catch (error) {
+                    setFormStatus({
+                        type: 'error',
+                        message: 'Sorry, there was an error sending your message. Please try again or contact us directly.'
+                    });
+                } finally {
+                    setIsSubmitting(false);
+                }
+            };
+
             const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -252,7 +391,7 @@
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <h1 className="text-4xl font-display font-bold text-white">Clementine</h1>
+                                    <h1 className="text-4xl font-display font-bold text-white">Lissa Belyea</h1>
                                     <p className="text-purple-100 mt-1 text-lg">Contemporary Artist</p>
                                 </div>
                                 <button
@@ -377,7 +516,10 @@
                                             <span className="text-lg font-semibold text-purple-900">Total:</span>
                                             <span className="text-2xl font-bold text-purple-900">${cartTotal.toLocaleString()}</span>
                                         </div>
-                                        <button className="w-full btn-primary py-4">
+                                        <button 
+                                            onClick={handleProceedToCheckout}
+                                            className="w-full btn-primary py-4"
+                                        >
                                             Proceed to Checkout
                                         </button>
                                     </div>
@@ -442,17 +584,180 @@
                             </div>
                         </div>
                     )}
+
+                    {showCheckout && (
+                        <div className="fixed inset-0 z-50 overflow-y-auto modal-overlay flex items-center justify-center p-4">
+                            <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+                                <div className="sticky top-0 bg-white border-b border-purple-100 p-6 flex justify-between items-center">
+                                    <h2 className="text-3xl font-display font-bold text-purple-900">Complete Your Purchase</h2>
+                                    <button onClick={() => setShowCheckout(false)} className="text-purple-500 hover:text-purple-700">
+                                        <X size={24} />
+                                    </button>
+                                </div>
+                                <div className="p-6">
+                                    {formStatus.type === '' ? (
+                                        <form onSubmit={handleSubmitContactForm} className="space-y-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <label className="block text-purple-900 font-medium mb-2">Full Name *</label>
+                                                    <input
+                                                        type="text"
+                                                        name="name"
+                                                        value={contactForm.name}
+                                                        onChange={handleInputChange}
+                                                        className="form-input w-full"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-purple-900 font-medium mb-2">Email Address *</label>
+                                                    <input
+                                                        type="email"
+                                                        name="email"
+                                                        value={contactForm.email}
+                                                        onChange={handleInputChange}
+                                                        className="form-input w-full"
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <label className="block text-purple-900 font-medium mb-2">Phone Number</label>
+                                                <input
+                                                    type="tel"
+                                                    name="phone"
+                                                    value={contactForm.phone}
+                                                    onChange={handleInputChange}
+                                                    className="form-input w-full"
+                                                />
+                                            </div>
+                                            
+                                            <div>
+                                                <label className="block text-purple-900 font-medium mb-2">Shipping Address *</label>
+                                                <input
+                                                    type="text"
+                                                    name="address"
+                                                    value={contactForm.address}
+                                                    onChange={handleInputChange}
+                                                    className="form-input w-full"
+                                                    required
+                                                />
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-2 gap-6">
+                                                <div>
+                                                    <label className="block text-purple-900 font-medium mb-2">City *</label>
+                                                    <input
+                                                        type="text"
+                                                        name="city"
+                                                        value={contactForm.city}
+                                                        onChange={handleInputChange}
+                                                        className="form-input w-full"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-purple-900 font-medium mb-2">State *</label>
+                                                    <input
+                                                        type="text"
+                                                        name="state"
+                                                        value={contactForm.state}
+                                                        onChange={handleInputChange}
+                                                        className="form-input w-full"
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <label className="block text-purple-900 font-medium mb-2">ZIP/Postal Code *</label>
+                                                <input
+                                                    type="text"
+                                                    name="zip"
+                                                    value={contactForm.zip}
+                                                    onChange={handleInputChange}
+                                                    className="form-input w-full"
+                                                    required
+                                                />
+                                            </div>
+                                            
+                                            <div>
+                                                <label className="block text-purple-900 font-medium mb-2">Additional Message (Optional)</label>
+                                                <textarea
+                                                    name="message"
+                                                    value={contactForm.message}
+                                                    onChange={handleInputChange}
+                                                    rows="4"
+                                                    className="form-input w-full"
+                                                    placeholder="Any special requests or questions about your order..."
+                                                ></textarea>
+                                            </div>
+                                            
+                                            <div className="bg-purple-50 p-4 rounded-lg">
+                                                <h3 className="font-semibold text-purple-900 mb-2">Order Summary</h3>
+                                                <div className="space-y-2">
+                                                    {cart.map(item => (
+                                                        <div key={item.id} className="flex justify-between text-purple-700">
+                                                            <span>{item.title} (x{item.quantity})</span>
+                                                            <span>${(item.price * item.quantity).toLocaleString()}</span>
+                                                        </div>
+                                                    ))}
+                                                    <div className="border-t border-purple-200 pt-2 mt-2 flex justify-between font-bold text-purple-900">
+                                                        <span>Total</span>
+                                                        <span>${cartTotal.toLocaleString()}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <button
+                                                type="submit"
+                                                disabled={isSubmitting}
+                                                className="w-full btn-primary py-4 text-lg flex items-center justify-center gap-2"
+                                            >
+                                                {isSubmitting ? (
+                                                    <>
+                                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                        Sending...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Check size={20} color="white" />
+                                                        Submit Inquiry
+                                                    </>
+                                                )}
+                                            </button>
+                                            
+                                            <p className="text-purple-600 text-sm text-center">
+                                                By submitting this form, you agree to be contacted to complete your art purchase.
+                                            </p>
+                                        </form>
+                                    ) : (
+                                        <div className={formStatus.type === 'success' ? 'success-message' : 'error-message'}>
+                                            <div className="flex items-center justify-center gap-2 mb-2">
+                                                {formStatus.type === 'success' && <Check size={24} color="white" />}
+                                                <h3 className="text-xl font-bold">
+                                                    {formStatus.type === 'success' ? 'Thank You!' : 'Oops! Something went wrong'}
+                                                </h3>
+                                            </div>
+                                            <p>{formStatus.message}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     
                     <footer className="bg-purple-900 text-white py-12 mt-16">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                 <div>
-                                    <h3 className="text-2xl font-display font-bold mb-4">Clementine</h3>
+                                    <h3 className="text-2xl font-display font-bold mb-4">Lissa Belyea</h3>
                                     <p className="text-purple-200">Contemporary artist creating vibrant, emotional works that explore color and form.</p>
                                 </div>
                                 <div>
                                     <h4 className="text-lg font-semibold mb-4">Contact</h4>
-                                    <p className="text-purple-200">Email: info@Clementineart.com</p>
+                                    <p className="text-purple-200">Email: info@lissabelart.com</p>
                                     <p className="text-purple-200">Studio: Portland, Oregon</p>
                                 </div>
                                 <div>
@@ -462,7 +767,7 @@
                                 </div>
                             </div>
                             <div className="border-t border-purple-700 mt-8 pt-8 text-center text-purple-300">
-                                <p>© {new Date().getFullYear()} Clementine Art. All rights reserved.</p>
+                                <p>© {new Date().getFullYear()} Lissa Belyea Art. All rights reserved.</p>
                             </div>
                         </div>
                     </footer>
